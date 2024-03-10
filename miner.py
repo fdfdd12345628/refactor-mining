@@ -1,5 +1,7 @@
 import os
 from github import Github
+import difflib
+
 
 # Authentication is defined via github.Auth
 from github import Auth
@@ -20,9 +22,9 @@ def get_pull_request(repo, number):
 
 if __name__ == '__main__':
     # get tensorflow pull 63229
-    pull = get_pull_request("tensorflow/tensorflow", 62199)
-    commit=pull.get_commits()[0]
-    print(commit)
+    # pull = get_pull_request("tensorflow/tensorflow", 62199)
+    # commit=pull.get_commits()[0]
+    # print(commit)
 
     # print usage
     rate=g.get_rate_limit()
@@ -35,10 +37,13 @@ if __name__ == '__main__':
     print(repo)
     
     # get pull request commit and diff of the commit with its parent
-    git_commit = repo.commit("20c20c2f3ec9e4d8ec5b0846c0b491b00132e664")
+    git_commit = repo.commit("6f64ad5d767a034df45a5eaab8b36fd688cd1217")
     print(git_commit)
     diff=git_commit.diff(git_commit.parents[0])
-    print(diff)
+    single_diff=diff[0]
+    d = difflib.Differ()
+    diff = d.compare(single_diff.a_blob.data_stream.read().decode().splitlines(), single_diff.b_blob.data_stream.read().decode().splitlines())
+    print('\n'.join(diff))
 
     # To close connections after use
     g.close()

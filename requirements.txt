@@ -1,2 +1,2 @@
-PyGithub
-GitPython
+PyGithub==1.54.1
+GitPython==3.1.14
